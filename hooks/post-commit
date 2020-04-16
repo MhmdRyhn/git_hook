@@ -1,0 +1,5 @@
+#!/bin/bash
+
+
+# curl http://jenkins-url/git/notifyCommit?url=repository-url
+curl http://localhost/git/notifyCommit?url=file:///var/projects/demo-project

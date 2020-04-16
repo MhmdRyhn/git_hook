@@ -23,13 +23,6 @@ pass_fail_decision() {
 }
 
 
-# -e is ised to allow backslash escapes
-echo -e "${BLUE}<<<<<<<<<< CHECKING UNIT TEST ${NC}"
-pytest -v
-RESULT=$?
-pass_fail_decision $RESULT "PASSED UNIT TEST" "FAILED UNIT TEST"
-
-
 echo -e "${BLUE}<<<<<<<<<< CHECKING SOURCE CODE LINT ${NC}"
 pylint --rcfile pylintrc m2a_dv2_api
 RESULT=$?
