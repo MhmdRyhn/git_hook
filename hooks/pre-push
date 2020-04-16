@@ -1,0 +1,54 @@
+#!/bin/bash
+
+
+NC='\033[0m'  
+RED='\033[0;31m'  
+GREEN='\033[0;32m'
+BLUE='\033[1;34m'
+YELLOW='\033[1;33m'
+
+FINAL_RESULT=0
+
+
+function pass_fail_decision() {
+  local result=$1
+  local success_message=$2
+  local failed_messsage=$3
+  if [ $result -ne 0 ]; then
+    # $((EXPRESSION))
+    FINAL_RESULT=$((FINAL_RESULT + 1))
+    echo -e "${RED}$failed_messsage >>>>>>>>>>>>>>>>${NC}"
+  else
+    echo -e "${GREEN}$success_message >>>>>>>>>>>>>>>>${NC}"
+  fi
+  echo -e "\n"
+}
+
+# ---------------------- Pylint (source code) ---------------------
+# -e is used to allow backslash escapes
+echo -e "${BLUE}<<<<<<<<<< CHECKING SOURCE CODE LINT${NC}"
+pylint --rcfile pylintrc m2a_dv2_api
+RESULT=$?
+pass_fail_decision $RESULT "PASSED SOURCE CODE LINT" "FAILED SOURCE CODE LINT"
+
+
+# --------------------- Pylint (test) -------------------------
+echo -e "${BLUE}<<<<<<<<<< CHECKING TEST LINT${NC}"
+pylint --rcfile test/pylintrc test/
+RESULT=$?
+pass_fail_decision $RESULT "PASSED TEST LINT" "FAILED TEST LINT"
+
+
+# ------------------ Unit Test -----------------------
+echo -e "${BLUE}<<<<<<<<<< CHECKING UNIT TEST${NC}"
+pytest -v
+RESULT=$?
+pass_fail_decision $RESULT "PASSED UNIT TEST" "FAILED UNIT TEST"
+
+
+if [ $FINAL_RESULT -eq 0 ]; then
+  echo -e "${GREEN}<<<<<<<<<< SUCCESSFULLY COMMITTED CHANGES >>>>>>>>>>>>>>>>${NC}"
+else
+  echo -e "${RED}<<<<<<<<<< <COMMIT DISCARDED> Fix errors and make commit again. >>>>>>>>>>>>>>>>${NC}"
+fi
+exit $FINAL_RESULT
