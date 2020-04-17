@@ -24,7 +24,7 @@ pass_fail_decision() {
 
 
 echo -e "${BLUE}<<<<<<<<<< CHECKING SOURCE CODE LINT ${NC}"
-pylint --rcfile pylintrc m2a_dv2_api
+pylint --rcfile pylintrc source_code_folder/
 RESULT=$?
 pass_fail_decision $RESULT "PASSED SOURCE CODE LINT" "FAILED SOURCE CODE LINT"
 
